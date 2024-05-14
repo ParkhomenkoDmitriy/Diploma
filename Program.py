@@ -2,15 +2,32 @@ import os
 from person import Person, PersonDatabase
 
 
+def load_database(database):
+    while True:
+        filename = input("Enter filename to load: ")
+        full_path = os.path.join("D:\\", filename + ".xlsx")
+        if os.path.exists(full_path):
+            database.load_from_excel(full_path)
+            print("Database loaded successfully.")
+            break
+        else:
+            choice = input("File not found. Repeat input? (y/n): ").lower()
+            if choice == 'n':
+                print("Exiting program.")
+                exit()  # Завершаем выполнение программы
+            elif choice != 'y':
+                print("Invalid choice. Please enter 'y' or 'n'.")
+
 def main():
     database = PersonDatabase()
+    load_database(database)  # Загрузка базы данных из файла при старте программы
+
     while True:
         print("\nMenu:")
         print("1. Add person")
         print("2. Search person")
         print("3. Save database to Excel")
-        print("4. Load database from Excel")
-        print("5. Exit")
+        print("4. Exit")
         choice = input("Enter your choice: ")
 
         if choice == "1":
@@ -113,27 +130,11 @@ def main():
                     break
 
         elif choice == "4":
-            while True:
-                filename = input("Enter filename to load: ")
-                full_path = os.path.join("D:\\", filename + ".xlsx")
-                if os.path.exists(full_path):
-                    database.load_from_excel(full_path)
-                    print("Database loaded successfully.")
-                    break  # Выход из цикла, если загрузка прошла успешно
-                else:
-                    choice = input("File not found. Repeat input? (y/n): ").lower()
-                    if choice == 'n':
-                        print("Returning to previous menu.")
-                        break  # Выход из цикла, если пользователь отказался от повторного ввода
-                    elif choice != 'y':
-                        print("Invalid choice. Please enter 'y' or 'n'.")
-
-        elif choice == "5":
             print("Exiting program.")
             break
 
         else:
-            print("Invalid choice. Please enter a number from 1 to 5.")
+            print("Invalid choice. Please enter a number from 1 to 4.")
 
 
 if __name__ == "__main__":
