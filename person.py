@@ -12,6 +12,9 @@ class Person:
         self.gender = gender
 
     def _parse_date(self, date_str):
+        if not date_str:  # Если строка пустая, возвращаем None
+            return None
+
         separators = ['.', ' ', '/', '-']
         for sep in separators:
             if sep in date_str:
@@ -77,6 +80,7 @@ class PersonDatabase:
         for person in self.people:
             sheet.append(person.to_excel_row())
         workbook.save(filename)
+
     def load_from_excel(self, filename):
         while True:
             try:
