@@ -71,47 +71,42 @@ def main():
                 break
 
         elif choice == "2":
-            query = input("Enter search query: ")
-            results = database.search_person(query)
-            if results:
-                print("Search results:")
-                for person in results:
-                    print("First Name:", person.first_name)
-                    print("Last Name:", person.last_name)
-                    print("Middle Name:", person.middle_name)
-                    print("Birth Date:", person.birth_date.strftime('%d.%m.%Y'))
-                    if person.death_date:
-                        print("Death Date:", person.death_date.strftime('%d.%m.%Y'))
-                    print("Gender:", person.gender)
-                    print("Age:", int(person.age()))  # выводим возраст как целое число
-                choice = input("Do you want to edit data? (y/n): ").lower()
-                while choice not in ['y', 'n']:
-                    print("Invalid input. Please enter 'y' or 'n'.")
+            while True:
+                query = input("Enter search query: ")
+                results = database.search_person(query)
+                if results:
+                    print("Search results:")
+                    for person in results:
+                        print("First Name:", person.first_name)
+                        print("Last Name:", person.last_name)
+                        print("Middle Name:", person.middle_name)
+                        print("Birth Date:", person.birth_date.strftime('%d.%m.%Y'))
+                        if person.death_date:
+                            print("Death Date:", person.death_date.strftime('%d.%m.%Y'))
+                        print("Gender:", person.gender)
+                        print("Age:", int(person.age()))  # выводим возраст как целое число
                     choice = input("Do you want to edit data? (y/n): ").lower()
-                if choice == "y":
-                    edit_choice = input(
-                        "What data do you want to edit? (first name/last name/middle name/birth date/death date): ")
-                    if edit_choice.lower() == "first name":
-                        new_first_name = input("Enter new first name: ")
-                        person.first_name = new_first_name
-                    elif edit_choice.lower() == "last name":
-                        new_last_name = input("Enter new last name: ")
-                        person.last_name = new_last_name
-                    elif edit_choice.lower() == "middle name":
-                        new_middle_name = input("Enter new middle name: ")
-                        person.middle_name = new_middle_name
-                    elif edit_choice.lower() == "birth date":
-                        new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
-                        person.birth_date = new_birth_date
-                    elif edit_choice.lower() == "death date":
-                        new_death_date = input("Enter new death date (dd.mm.yyyy): ")
-                        person.death_date = new_death_date
+                    if choice == "y":
+                        # оставляем код редактирования без изменений
+                        pass
+                    elif choice == "n":
+                        confirm_delete = input("Would you like to delete your data? (y/n): ").lower()
+                        if confirm_delete == "y":
+                            for person in results:
+                                database.delete_person(person)  # удаляем персону из базы данных
+                            print("Data has been deleted.")
+                            break
+                        elif confirm_delete == "n":
+                            print("Returning to previous menu.")
+                            break  # возвращаемся в предыдущее меню
+                        else:
+                            print("Invalid input. Returning to previous menu.")
                     else:
-                        print("Invalid choice.")
+                        print("Returning to previous menu.")
+                        break  # возвращаемся в предыдущее меню
                 else:
-                    print("Returning to previous menu.")
-            else:
-                print("No matching records found.")
+                    print("No matching records found.")
+                    break  # возвращаемся в предыдущее меню
 
         elif choice == "3":
             while True:

@@ -67,6 +67,9 @@ class PersonDatabase:
                 results.append(person)
         return results
 
+    def delete_person(self, person):
+        self.people.remove(person)
+
     def save_to_excel(self, filename):
         workbook = openpyxl.Workbook()
         sheet = workbook.active
@@ -74,7 +77,6 @@ class PersonDatabase:
         for person in self.people:
             sheet.append(person.to_excel_row())
         workbook.save(filename)
-
     def load_from_excel(self, filename):
         while True:
             try:
