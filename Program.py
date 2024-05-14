@@ -107,7 +107,7 @@ def main():
                                 person.birth_date = new_birth_date
                             elif edit_choice.lower() == "5":
                                 new_death_date = input("Enter new death date (dd.mm.yyyy): ")
-                                person.death_date = new_death_date
+                                person.death_date = person._parse_date(new_death_date)
                             else:
                                 print("Invalid choice.")
                         print("Data has been updated successfully.")
@@ -129,7 +129,6 @@ def main():
                 else:
                     print("No matching records found.")
                     break
-
 
         elif choice == "3":
             while True:
