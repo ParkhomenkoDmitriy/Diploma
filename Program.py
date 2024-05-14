@@ -110,6 +110,8 @@ def main():
                                 person.death_date = new_death_date
                             else:
                                 print("Invalid choice.")
+                        print("Data has been updated successfully.")
+                        break  # Returning to main menu
                     elif choice == "n":
                         confirm_delete = input("Would you like to delete your data? (y/n): ").lower()
                         while confirm_delete not in ['y', 'n']:
