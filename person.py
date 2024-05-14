@@ -2,7 +2,6 @@ import openpyxl
 import datetime
 import calendar
 
-
 class Person:
     def __init__(self, first_name, last_name, birth_date, gender, middle_name=None, death_date=None):
         self.first_name = first_name
@@ -34,14 +33,21 @@ class Person:
 
     def age(self):
         if self.death_date:
-            return (self.death_date - self.birth_date).days / 365.25  # учитываем високосные годы
+            delta = self.death_date - self.birth_date
         else:
             today = datetime.date.today()
-            return (today - self.birth_date).days / 365.25  # учитываем високосные годы
+            delta = today - self.birth_date
+
+        years = delta.days / 365
+        leap_years = sum(1 for year in range(self.birth_date.year, self.birth_date.year + int(years)) if calendar.isleap(year))
+
+        return (delta.days + leap_years) / 365  # учитываем високосные годы
 
     def to_excel_row(self):
         return [self.first_name, self.last_name, self.middle_name, self.birth_date.strftime('%d.%m.%Y'),
                 self.death_date.strftime('%d.%m.%Y') if self.death_date else '', self.gender]
+
+# Остальной код остается без изменений
 
 
 class PersonDatabase:
