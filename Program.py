@@ -14,9 +14,10 @@ def load_database(database):
             choice = input("File not found. Repeat input? (y/n): ").lower()
             if choice == 'n':
                 print("Exiting program.")
-                exit()  # Завершаем выполнение программы
+                exit()
             elif choice != 'y':
                 print("Invalid choice. Please enter 'y' or 'n'.")
+
 
 def main():
     database = PersonDatabase()
@@ -38,30 +39,26 @@ def main():
                 birth_date = input("Enter birth date (dd.mm.yyyy): ")
                 gender = input("Enter gender (male/female): ")
 
-                # Проверка заполнения обязательных полей
                 if not all([first_name, last_name, birth_date, gender]):
                     print("Error: Please fill in all required fields.")
                     choice = input("Do you want to fill them again? (y/n): ").lower()
                     if choice == 'y':
-                        continue  # Повтор ввода
+                        continue
                     elif choice == 'n':
-                        break  # Возврат в главное меню
+                        break
                     else:
                         print("Invalid choice. Please enter 'y' or 'n'.")
                         continue
 
-                # Проверка формата даты рождения
                 if birth_date.count(".") != 2 or len(birth_date.split(".")) != 3:
                     print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
                     continue
 
-                # Опциональные поля
                 death_date = input("Enter death date (optional, dd.mm.yyyy): ")
                 if death_date and (death_date.count(".") != 2 or len(death_date.split(".")) != 3):
                     print("Invalid date format for death date. Please use dd.mm.yyyy format.")
                     continue
 
-                # Проверка валидности пола
                 if gender.lower() not in ['male', 'female', 'мужской', 'женский']:
                     print("Invalid gender. Please enter 'male' or 'female' or 'мужской' or 'женский'.")
                     continue
@@ -84,29 +81,28 @@ def main():
                         if person.death_date:
                             print("Death Date:", person.death_date.strftime('%d.%m.%Y'))
                         print("Gender:", person.gender)
-                        print("Age:", int(person.age()))  # выводим возраст как целое число
+                        print("Age:", int(person.age()))
                     choice = input("Do you want to edit data? (y/n): ").lower()
                     if choice == "y":
-                        # оставляем код редактирования без изменений
                         pass
                     elif choice == "n":
                         confirm_delete = input("Would you like to delete your data? (y/n): ").lower()
                         if confirm_delete == "y":
                             for person in results:
-                                database.delete_person(person)  # удаляем персону из базы данных
+                                database.delete_person(person)
                             print("Data has been deleted.")
                             break
                         elif confirm_delete == "n":
                             print("Returning to previous menu.")
-                            break  # возвращаемся в предыдущее меню
+                            break
                         else:
                             print("Invalid input. Returning to previous menu.")
                     else:
                         print("Returning to previous menu.")
-                        break  # возвращаемся в предыдущее меню
+                        break
                 else:
                     print("No matching records found.")
-                    break  # возвращаемся в предыдущее меню
+                    break
 
         elif choice == "3":
             while True:
