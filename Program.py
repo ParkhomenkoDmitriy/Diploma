@@ -105,7 +105,7 @@ def main():
                             elif edit_choice.lower() == "4":
                                 new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
                                 person.birth_date = new_birth_date
-                            elif edit_choice.lower() == "5":
+                            elif edit_choice.lower() == "5":  #внесены изменения
                                 new_death_date = input("Enter new death date (dd.mm.yyyy): ")
                                 person.death_date = person._parse_date(new_death_date)
                             else:
@@ -176,3 +176,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# abrakadabra
