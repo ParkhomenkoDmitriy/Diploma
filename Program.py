@@ -36,17 +36,37 @@ def main():
                 last_name = input("Enter last name: ")
                 middle_name = input("Enter middle name (optional): ")
                 birth_date = input("Enter birth date (dd.mm.yyyy): ")
+                gender = input("Enter gender (male/female): ")
+
+                # Проверка заполнения обязательных полей
+                if not all([first_name, last_name, birth_date, gender]):
+                    print("Error: Please fill in all required fields.")
+                    choice = input("Do you want to fill them again? (y/n): ").lower()
+                    if choice == 'y':
+                        continue  # Повтор ввода
+                    elif choice == 'n':
+                        break  # Возврат в главное меню
+                    else:
+                        print("Invalid choice. Please enter 'y' or 'n'.")
+                        continue
+
+                # Проверка формата даты рождения
                 if birth_date.count(".") != 2 or len(birth_date.split(".")) != 3:
-                    print("Invalid date format. Please use dd.mm.yyyy format.")
+                    print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
                     continue
+
+                # Опциональные поля
                 death_date = input("Enter death date (optional, dd.mm.yyyy): ")
                 if death_date and (death_date.count(".") != 2 or len(death_date.split(".")) != 3):
-                    print("Invalid date format. Please use dd.mm.yyyy format.")
+                    print("Invalid date format for death date. Please use dd.mm.yyyy format.")
                     continue
-                gender = input("Enter gender (male/female): ")
+
+                # Проверка валидности пола
                 if gender.lower() not in ['male', 'female', 'мужской', 'женский']:
                     print("Invalid gender. Please enter 'male' or 'female' or 'мужской' or 'женский'.")
                     continue
+
+                # Добавление персоны в базу данных
                 database.add_person(Person(first_name, last_name, birth_date, gender, middle_name, death_date))
                 break
 
