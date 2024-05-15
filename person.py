@@ -1,6 +1,7 @@
 import openpyxl
 import datetime
 import calendar
+import os
 
 class Person:
     def __init__(self, first_name, last_name, birth_date, gender, middle_name=None, death_date=None):
@@ -12,49 +13,38 @@ class Person:
         self.gender = gender
 
     def _parse_date(self, date_str):
-        if not date_str:  # Если строка пустая, возвращаем None
+        if not date_str:  # If the string is empty, return None
             return None
 
-        separators = ['.', ' ', '/', '-']
-        for sep in separators:
-            if sep in date_str:
-                date_list = date_str.split(sep)
-                break
-        else:
-            raise ValueError(
-                "Invalid date format. Use one of the following formats: dd.mm.yyyy, dd mm yyyy, dd/mm/yyyy, dd-mm-yyyy")
-
-        if len(date_list) != 3:
-            raise ValueError(
-                "Invalid date format. Use one of the following formats: dd.mm.yyyy, dd mm yyyy, dd/mm/yyyy, dd-mm-yyyy")
-
-        try:
-            day, month, year = map(int, date_list)
-            return datetime.date(year, month, day)
-        except ValueError:
-            raise ValueError("Invalid date")
+        formats = ["%d.%m.%Y", "%d %m %Y", "%d/%m/%Y", "%d,%m,%Y", "%d-%m-%Y"]
+        for date_format in formats:
+            try:
+                return datetime.datetime.strptime(date_str, date_format).date()
+            except ValueError:
+                continue
+        raise ValueError("Invalid date format. Please use dd.mm.yyyy format.")
 
     # В методе age() класса Person
     def age(self, today=None):
-        if self.death_date:
-            delta = self.death_date - self.birth_date
-        else:
-            if not today:
-                today = datetime.date.today()
-            delta = today - self.birth_date
+        if not today:
+            today = datetime.date.today()
 
-        years = delta.days / 365
-        leap_years = sum(
-            1 for year in range(self.birth_date.year, self.birth_date.year + int(years)) if calendar.isleap(year))
+        age = today.year - self.birth_date.year
 
-        return int((delta.days + leap_years) / 365)  # приводим к целому числу
+        # Проверяем, наступил ли уже день рождения в этом году
+        if (self.birth_date.month, self.birth_date.day) > (today.month, today.day):
+            # Если еще не наступил, корректируем возраст
+            age -= 1
+
+        return age
+
+    def count_leap_years(self, start_year, end_year):
+        leap_years = sum(1 for year in range(start_year, end_year + 1) if calendar.isleap(year))
+        return leap_years
 
     def to_excel_row(self):
         return [self.first_name, self.last_name, self.middle_name, self.birth_date.strftime('%d.%m.%Y'),
                 self.death_date.strftime('%d.%m.%Y') if self.death_date else '', self.gender]
-
-# Остальной код остается без изменений
-
 
 class PersonDatabase:
     def __init__(self):
@@ -62,8 +52,6 @@ class PersonDatabase:
 
     def add_person(self, person):
         self.people.append(person)
-
-
 
     def delete_person(self, person):
         self.people.remove(person)
@@ -81,6 +69,7 @@ class PersonDatabase:
                     (person.middle_name and any(part.lower() in person.middle_name.lower() for part in query.split())):
                 results.append(person)
         return results
+
     def save_to_excel(self, filename):
         workbook = openpyxl.Workbook()
         sheet = workbook.active
@@ -107,6 +96,16 @@ class PersonDatabase:
                 print("An error occurred while loading the database:", e)
                 break
 
+def main():
+    database = PersonDatabase()
+    database.load_from_excel("people.xlsx")
+
+    # Пример использования:
+    for person in database.people:
+        print(f"{person.first_name} {person.last_name}: {person.age()} years old")
+
+    # Сохранение базы данных в Excel файл
+    database.save_to_excel("people_updated.xlsx")
+
 if __name__ == "__main__":
     main()
-

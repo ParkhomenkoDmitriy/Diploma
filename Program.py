@@ -4,24 +4,37 @@ from person import Person, PersonDatabase
 
 def load_database(database):
     while True:
-        filename = input("Enter filename to load: ")
-        full_path = os.path.join("D:\\", filename + ".xlsx")
-        if os.path.exists(full_path):
-            database.load_from_excel(full_path)
-            print("Database loaded successfully.")
-            break
+        choice = input("Menu:\n1. Load database from file\n2. Create new database file\n3. Exit\nEnter your choice: ").lower()
+        if choice == "1":
+            filename = input("Enter filename to load: ")
+            full_path = os.path.join("D:\\", filename + ".xlsx")
+            if os.path.exists(full_path):
+                database.load_from_excel(full_path)
+                print("Database loaded successfully.")
+                break
+            else:
+                print("File not found.")
+                continue
+        elif choice == "2":
+            filename = input("Enter filename to create: ")
+            full_path = os.path.join("D:\\", filename + ".xlsx")
+            if os.path.exists(full_path):
+                print("File already exists.")
+                continue
+            else:
+                database.save_to_excel(full_path)
+                print("New database created successfully.")
+                break
+        elif choice == "3":
+            print("Exiting program.")
+            exit()  # Выход из программы
         else:
-            choice = input("File not found. Repeat input? (y/n): ").lower()
-            if choice == 'n':
-                print("Exiting program.")
-                exit()
-            elif choice != 'y':
-                print("Invalid choice. Please enter 'y' or 'n'.")
+            print("Invalid choice. Please enter '1', '2' or '3'.")
 
 
 def main():
     database = PersonDatabase()
-    load_database(database)  # Загрузка базы данных из файла при старте программы
+    load_database(database)  # Загрузка или создание базы данных при старте программы
 
     while True:
         print("\nMenu:")
@@ -37,6 +50,7 @@ def main():
                 last_name = input("Enter last name: ")
                 middle_name = input("Enter middle name (optional): ")
                 birth_date = input("Enter birth date (dd.mm.yyyy): ")
+                death_date = input("Enter death date (optional, dd.mm.yyyy): ")
                 gender = input("Enter gender (male/female): ")
 
                 if not all([first_name, last_name, birth_date, gender]):
@@ -54,7 +68,6 @@ def main():
                     print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
                     continue
 
-                death_date = input("Enter death date (optional, dd.mm.yyyy): ")
                 if death_date and (death_date.count(".") != 2 or len(death_date.split(".")) != 3):
                     print("Invalid date format for death date. Please use dd.mm.yyyy format.")
                     continue
