@@ -32,7 +32,7 @@ def load_database(database):
                 break
         elif choice == "3":
             print("Exiting program.")
-            exit()  # Выход из программы
+            exit()
         else:
             print("Invalid choice. Please enter '1', '2' or '3'.")
 
@@ -59,15 +59,15 @@ def main():
                 gender = input("Enter gender (male/female): ")
 
                 if not all([first_name, last_name, birth_date, gender]):
-                    print("Error: Please fill in all required fields.")
-                    choice = input("Do you want to fill them again? (y/n): ").lower()
-                    if choice == 'y':
-                        continue
-                    elif choice == 'n':
-                        break
-                    else:
-                        print("Invalid choice. Please enter 'y' or 'n'.")
-                        continue
+                    while True:
+                        print("Error: Please fill in all required fields.")
+                        choice = input("Do you want to fill them again? (y/n): ").lower()
+                        if choice == 'y':
+                            break  # Возвращаемся к вводу данных
+                        elif choice == 'n':
+                            break  # Завершаем ввод данных
+                        else:
+                            print("Invalid choice. Please enter 'y' or 'n'.")
 
                 if not is_valid_date_format(birth_date):
                     print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
