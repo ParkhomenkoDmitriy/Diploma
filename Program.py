@@ -3,8 +3,7 @@ import re
 from person import Person, PersonDatabase
 
 def is_valid_date_format(date_str):
-    # Паттерн для проверки формата даты (dd[разделитель]mm[разделитель]yyyy)
-    pattern = r'\d{2}[./ -]\d{2}[./ -]\d{4}'
+    pattern = r'\d{2}[./ -]\d{2}[./ -]\d{4}' # Паттерн для проверки формата даты
     return re.fullmatch(pattern, date_str) is not None
 
 def load_database(database):
@@ -51,9 +50,9 @@ def main():
 
         if choice == "1":
             while True:
-                first_name = input("Enter first name: ")
-                last_name = input("Enter last name: ")
-                middle_name = input("Enter middle name (optional): ")
+                first_name = input("Enter first name: ").title()
+                last_name = input("Enter last name: ").title()
+                middle_name = input("Enter middle name (optional): ").title()
                 birth_date = input("Enter birth date (dd.mm.yyyy): ")
                 death_date = input("Enter death date (optional, dd.mm.yyyy): ")
                 gender = input("Enter gender (male/female): ")
