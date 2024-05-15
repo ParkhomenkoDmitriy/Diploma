@@ -27,15 +27,18 @@ class TestPersonAndPersonDatabase(unittest.TestCase):
 
         def test_parse_date_invalid(self):
             # Проверяем, что метод _parse_date правильно обрабатывает некорректные даты
-            with self.assertRaises(ValueError):
-                Person("John", "Doe", "1980-01-01", "male")  # Неправильный формат
-            with self.assertRaises(ValueError):
-                Person("John", "Doe", "01.01", "male")  # Неправильный формат
-            with self.assertRaises(ValueError):
-                Person("John", "Doe", "01.01.1980.01", "male")  # Неправильный формат
-            with self.assertRaises(ValueError):
-                Person("John", "Doe", "", "male")  # Пустая строка
-
+            invalid_dates = [
+                "1980-01-01",  # Неправильный формат
+                "01.01",  # Неправильный формат
+                "01.01.1980.01",  # Неправильный формат
+                "",  # Пустая строка
+                "01/01/1980",  # Дата в неподдерживаемом формате
+                "01,01,1980",  # Дата в неподдерживаемом формате
+                "01 01 1980"  # Дата в неподдерживаемом формате
+            ]
+            for date_str in invalid_dates:
+                with self.assertRaises(ValueError):
+                    Person("John", "Doe", date_str, "male")
     def test_person_search(self):
         # Тестирование метода search_person() класса PersonDatabase
         database = PersonDatabase()

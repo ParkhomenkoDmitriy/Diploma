@@ -1,6 +1,11 @@
 import os
+import re
 from person import Person, PersonDatabase
 
+def is_valid_date_format(date_str):
+    # Паттерн для проверки формата даты (dd[разделитель]mm[разделитель]yyyy)
+    pattern = r'\d{2}[./ -]\d{2}[./ -]\d{4}'
+    return re.fullmatch(pattern, date_str) is not None
 
 def load_database(database):
     while True:
@@ -64,11 +69,11 @@ def main():
                         print("Invalid choice. Please enter 'y' or 'n'.")
                         continue
 
-                if birth_date.count(".") != 2 or len(birth_date.split(".")) != 3:
+                if not is_valid_date_format(birth_date):
                     print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
                     continue
 
-                if death_date and (death_date.count(".") != 2 or len(death_date.split(".")) != 3):
+                if death_date and not is_valid_date_format(death_date):
                     print("Invalid date format for death date. Please use dd.mm.yyyy format.")
                     continue
 
@@ -79,7 +84,6 @@ def main():
                 # Добавление персоны в базу данных
                 database.add_person(Person(first_name, last_name, birth_date, gender, middle_name, death_date))
                 break
-
         elif choice == "2":
             while True:
                 query = input("Enter search query: ")

@@ -3,26 +3,34 @@ import datetime
 import calendar
 import os
 
+
+def _parse_date(date_str):
+    if not date_str:  # Если строка пустая, вернуть None
+        return None
+
+    # Пробуем обработать строку для каждого из форматов
+    formats = ["%d.%m.%Y", "%d %m %Y", "%d/%m/%Y", "%d,%m,%Y", "%d-%m-%Y"]
+
+    for date_format in formats:
+        try:
+            # Пытаемся преобразовать строку в дату используя текущий формат
+            return datetime.datetime.strptime(date_str, date_format).date()
+        except ValueError:
+            # Если возникает исключение ValueError, продолжаем с следующим форматом
+            continue
+
+    # Если ни один из форматов не сработал, выдаем исключение
+    raise ValueError("Invalid date format. Please use one of the following formats: %s" % ", ".join(formats))
+
+
 class Person:
     def __init__(self, first_name, last_name, birth_date, gender, middle_name=None, death_date=None):
         self.first_name = first_name
         self.last_name = last_name
         self.middle_name = middle_name
-        self.birth_date = self._parse_date(birth_date)
-        self.death_date = self._parse_date(death_date) if death_date else None
+        self.birth_date = _parse_date(birth_date)
+        self.death_date = _parse_date(death_date) if death_date else None
         self.gender = gender
-
-    def _parse_date(self, date_str):
-        if not date_str:  # If the string is empty, return None
-            return None
-
-        formats = ["%d.%m.%Y", "%d %m %Y", "%d/%m/%Y", "%d,%m,%Y", "%d-%m-%Y"]
-        for date_format in formats:
-            try:
-                return datetime.datetime.strptime(date_str, date_format).date()
-            except ValueError:
-                continue
-        raise ValueError("Invalid date format. Please use dd.mm.yyyy format.")
 
     # В методе age() класса Person
     def age(self, today=None):
