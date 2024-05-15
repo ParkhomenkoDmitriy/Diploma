@@ -62,5 +62,7 @@ class TestPersonAndPersonDatabase(unittest.TestCase):
         self.assertEqual(len(database.search_person("Джон")), 1)
         self.assertEqual(len(database.search_person("Доу")), 2)
 
+
+
 if __name__ == '__main__':
     unittest.main()

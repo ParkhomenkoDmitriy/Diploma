@@ -1,6 +1,7 @@
 import os
 import re
 from person import Person, PersonDatabase
+from person import _parse_date
 
 def is_valid_date_format(date_str):
     pattern = r'\d{2}[./ -]\d{2}[./ -]\d{4}' # Паттерн для проверки формата даты
@@ -53,8 +54,23 @@ def main():
                 first_name = input("Enter first name: ").title()
                 last_name = input("Enter last name: ").title()
                 middle_name = input("Enter middle name (optional): ").title()
-                birth_date = input("Enter birth date (dd.mm.yyyy): ")
+
+                # Input and format check for birth date
+                while True:
+                    birth_date = input("Enter birth date (dd.mm.yyyy): ")
+                    if is_valid_date_format(birth_date):
+                        break
+                    print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
+
+                # Check for presence and input format of death date (if provided)
                 death_date = input("Enter death date (optional, dd.mm.yyyy): ")
+                if death_date:
+                    while True:
+                        if is_valid_date_format(death_date):
+                            break
+                        print("Invalid date format for death date. Please use dd.mm.yyyy format or leave blank.")
+                        death_date = input("Enter death date (optional, dd.mm.yyyy): ")
+
                 gender = input("Enter gender (male/female): ")
 
                 if not all([first_name, last_name, birth_date, gender]):
@@ -62,27 +78,21 @@ def main():
                         print("Error: Please fill in all required fields.")
                         choice = input("Do you want to fill them again? (y/n): ").lower()
                         if choice == 'y':
-                            break  # Возвращаемся к вводу данных
+                            break  # Return to data input
                         elif choice == 'n':
-                            break  # Завершаем ввод данных
+                            break  # Finish data input
                         else:
                             print("Invalid choice. Please enter 'y' or 'n'.")
 
-                if not is_valid_date_format(birth_date):
-                    print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
+                if gender.lower() not in ['male', 'female']:
+                    print("Invalid gender. Please enter 'male' or 'female'.")
                     continue
 
-                if death_date and not is_valid_date_format(death_date):
-                    print("Invalid date format for death date. Please use dd.mm.yyyy format.")
-                    continue
-
-                if gender.lower() not in ['male', 'female', 'мужской', 'женский']:
-                    print("Invalid gender. Please enter 'male' or 'female' or 'мужской' or 'женский'.")
-                    continue
-
-                # Добавление персоны в базу данных
+                # Adding person information to the database
                 database.add_person(Person(first_name, last_name, birth_date, gender, middle_name, death_date))
                 break
+
+
         elif choice == "2":
             while True:
                 query = input("Enter search query: ")
@@ -119,13 +129,31 @@ def main():
                                 new_middle_name = input("Enter new middle name: ")
                                 person.middle_name = new_middle_name
                             elif edit_choice.lower() == "4":
-                                new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
-                                person.birth_date = new_birth_date
-                            elif edit_choice.lower() == "5":  #внесены изменения
-                                new_death_date = input("Enter new death date (dd.mm.yyyy): ")
-                                person.death_date = person._parse_date(new_death_date)
-                            else:
-                                print("Invalid choice.")
+                                while True:
+                                    new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
+                                    if is_valid_date_format(new_birth_date):
+                                        person.birth_date = _parse_date(
+                                            new_birth_date)  # Используйте _parse_date из модуля
+                                        print("Data has been updated successfully.")
+                                        break
+                                    else:
+                                        print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
+
+                            if edit_choice.lower() == "5":
+                                while True:
+                                    new_death_date = input(
+                                        "Enter new death date (dd.mm.yyyy) or leave blank to remove death date: ")
+                                    if not new_death_date.strip():  # If the string is empty or contains only spaces
+                                        person.death_date = None
+                                        print("Death date has been removed successfully.")
+                                        break
+                                    elif is_valid_date_format(new_death_date):
+                                        person.death_date = _parse_date(new_death_date)  # Access _parse_date via the class
+                                        print("Data has been updated successfully.")
+                                        break
+                                    else:
+                                        print("Invalid date format for death date. Please use dd.mm.yyyy format.")
+
                         print("Data has been updated successfully.")
                         break  # Returning to main menu
                     elif choice == "n":
