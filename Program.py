@@ -50,16 +50,29 @@ def main():
 
         if choice == "1":
             while True:
+                # Переменная для отслеживания введенных данных
+                data_entered = False
+
                 first_name = input("Enter first name: ").title()
                 last_name = input("Enter last name: ").title()
                 middle_name = input("Enter middle name (optional): ").title()
 
-                # Input and format check for birth date
+                # Loop until a valid birth date is entered
                 while True:
                     birth_date = input("Enter birth date (dd.mm.yyyy): ")
+                    if not birth_date.strip():
+                        print("Birth date is required.")
+                        break  # Exit loop if birth date is not provided
                     if is_valid_date_format(birth_date):
+                        # Если введена хотя бы одна дата, устанавливаем флаг data_entered в True
+                        data_entered = True
                         break
                     print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
+
+                # Если данные не были введены, возвращаемся к предыдущему меню
+                if not data_entered:
+                    print("No information entered. Returning to previous menu.")
+                    break
 
                 # Check for presence and input format of death date (if provided)
                 death_date = input("Enter death date (optional, dd.mm.yyyy): ")
@@ -72,16 +85,14 @@ def main():
 
                 gender = input("Enter gender (male/female): ")
 
+                # Проверяем, заполнены ли все обязательные поля
                 if not all([first_name, last_name, birth_date, gender]):
-                    while True:
-                        print("Error: Please fill in all required fields.")
-                        choice = input("Do you want to fill them again? (y/n): ").lower()
-                        if choice == 'y':
-                            break  # Return to data input
-                        elif choice == 'n':
-                            break  # Finish data input
-                        else:
-                            print("Invalid choice. Please enter 'y' or 'n'.")
+                    print("Error: Please fill in all required fields.")
+                    choice = input("Do you want to fill them again? (y/n): ").lower()
+                    if choice == 'n':
+                        break  # Finish data input
+                    else:
+                        continue  # Return to data input
 
                 if gender.lower() not in ['male', 'female']:
                     print("Invalid gender. Please enter 'male' or 'female'.")
@@ -90,6 +101,7 @@ def main():
                 # Adding person information to the database
                 database.add_person(Person(first_name, last_name, birth_date, gender, middle_name, death_date))
                 break
+
 
         elif choice == "2":
             while True:
@@ -119,7 +131,7 @@ def main():
                         for person in results:
                             print("Editing data for", person.first_name, person.last_name)
                             edit_choice = input("What data do you want to edit? "
-                                                "(\n1-first name\n2-last name\n3-middle name\n4-birth date\n5-death date\nEnter your choice: ")
+                                                "\n1-first name\n2-last name\n3-middle name\n4-birth date\n5-death date\nEnter your choice: ")
                             if edit_choice.lower() == "1":
                                 new_first_name = input("Enter new first name: ")
                                 person.first_name = new_first_name

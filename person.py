@@ -115,5 +115,6 @@ def main():
     # Сохранение базы данных в Excel файл
     database.save_to_excel("people_updated.xlsx")
 
+
 if __name__ == "__main__":
     main()

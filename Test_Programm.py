@@ -18,7 +18,8 @@ class TestPersonAndPersonDatabase(unittest.TestCase):
             self.assertEqual(person1.age(today), 44)
             self.assertEqual(person2.age(today), 34)
             self.assertEqual(person3.age(today), 24)
-    class TestPerson(unittest.TestCase):
+
+    class TestPersonClass(unittest.TestCase):
 
         def test_parse_date_valid(self):
             # Проверяем, что метод _parse_date правильно парсит корректные даты
@@ -39,6 +40,7 @@ class TestPersonAndPersonDatabase(unittest.TestCase):
             for date_str in invalid_dates:
                 with self.assertRaises(ValueError):
                     Person("John", "Doe", date_str, "male")
+
     def test_person_search(self):
         # Тестирование метода search_person() класса PersonDatabase
         database = PersonDatabase()
@@ -61,7 +63,6 @@ class TestPersonAndPersonDatabase(unittest.TestCase):
         self.assertEqual(len(database.search_person("нгтон")), 1)
         self.assertEqual(len(database.search_person("Джон")), 1)
         self.assertEqual(len(database.search_person("Доу")), 2)
-
 
 
 if __name__ == '__main__':
