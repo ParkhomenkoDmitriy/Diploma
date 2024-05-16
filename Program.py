@@ -129,32 +129,40 @@ def main():
                             elif edit_choice.lower() == "3":
                                 new_middle_name = input("Enter new middle name: ")
                                 person.middle_name = new_middle_name
+
                             elif edit_choice.lower() == "4":
                                 while True:
-                                    new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
-                                    if is_valid_date_format(new_birth_date):
-                                        person.birth_date = _parse_date(new_birth_date)
-                                        print("Data has been updated successfully.")
-                                        break
-                                    else:
-                                        print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
+                                    try:
+                                        new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
+                                        if is_valid_date_format(new_birth_date):
+                                            person.birth_date = _parse_date(new_birth_date)
+                                            print("Data has been updated successfully.")
+                                            break
+                                        else:
+                                            print("Invalid date format for birth date. Please use dd.mm.yyyy format.")
+                                    except Exception as e:
+                                        print("An error occurred:", str(e))
+                                        continue  # Возвращение к вводу даты
 
-                            if edit_choice.lower() == "5":
+                            elif edit_choice.lower() == "5":
                                 while True:
-                                    new_death_date = input(
-                                        "Enter new death date (dd.mm.yyyy) or leave blank to remove death date: ")
-                                    if not new_death_date.strip():
-                                        person.death_date = None
-                                        print("Death date has been removed successfully.")
-                                        break
-                                    elif is_valid_date_format(new_death_date):
-                                        person.death_date = _parse_date(new_death_date)
-                                        print("Data has been updated successfully.")
-                                        break
-                                    else:
-                                        print("Invalid date format for death date. Please use dd.mm.yyyy format.")
+                                    try:
+                                        new_death_date = input(
+                                            "Enter new death date (dd.mm.yyyy) or leave blank to remove death date: ")
+                                        if not new_death_date.strip():
+                                            person.death_date = None
+                                            print("Death date has been removed successfully.")
+                                            break
+                                        elif is_valid_date_format(new_death_date):
+                                            person.death_date = _parse_date(new_death_date)
+                                            print("Data has been updated successfully.")
+                                            break
+                                        else:
+                                            print("Invalid date format for death date. Please use dd.mm.yyyy format.")
+                                    except Exception as e:
+                                        print("An error occurred:", str(e))
+                                        continue  # Возвращение к вводу даты
 
-                        print("Data has been updated successfully.")
                         break  # Returning to main menu
                     elif choice == "2":
                         confirm_delete = input("Would you like to delete your data? (y/n): ").lower()
