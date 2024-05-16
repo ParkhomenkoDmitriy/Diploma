@@ -36,7 +36,6 @@ def load_database(database):
         else:
             print("Invalid choice. Please enter '1', '2' or '3'.")
 
-
 def main():
     database = PersonDatabase()
     load_database(database)  # Загрузка или создание базы данных при старте программы
@@ -92,7 +91,6 @@ def main():
                 database.add_person(Person(first_name, last_name, birth_date, gender, middle_name, death_date))
                 break
 
-
         elif choice == "2":
             while True:
                 query = input("Enter search query: ")
@@ -107,18 +105,21 @@ def main():
                         if person.death_date:
                             print("Death Date:", person.death_date.strftime('%d.%m.%Y'))
                         print("Gender:", person.gender)
-                        print("Age:", int(person.age()))  # выводим возраст как целое число
+                        print("Age:", int(person.age()))  # display age as integer
 
-                    choice = input("Do you want to edit data? (y/n): ").lower()
-                    while choice not in ['y', 'n']:
-                        print("Invalid input. Please enter 'y' or 'n'.")
-                        choice = input("Do you want to edit data? (y/n): ").lower()
+                    choice = input(
+                        "Choose action:\n1. Edit\n2. Delete\n3. Return to previous menu\nEnter your choice: ")
 
-                    if choice == "y":
+                    while choice not in ['1', '2', '3']:
+                        print("Invalid input. Please enter '1', '2', or '3'.")
+                        choice = input(
+                            "Choose action:\n1. Edit\n2. Delete\n3. Return to previous menu\nEnter your choice: ")
+
+                    if choice == "1":
                         for person in results:
                             print("Editing data for", person.first_name, person.last_name)
                             edit_choice = input("What data do you want to edit? "
-                                                "(1-first name/2-last name/3-middle name/4-birth date/5-death date): ")
+                                                "(\n1-first name\n2-last name\n3-middle name\n4-birth date\n5-death date\nEnter your choice: ")
                             if edit_choice.lower() == "1":
                                 new_first_name = input("Enter new first name: ")
                                 person.first_name = new_first_name
@@ -132,8 +133,7 @@ def main():
                                 while True:
                                     new_birth_date = input("Enter new birth date (dd.mm.yyyy): ")
                                     if is_valid_date_format(new_birth_date):
-                                        person.birth_date = _parse_date(
-                                            new_birth_date)  # Используйте _parse_date из модуля
+                                        person.birth_date = _parse_date(new_birth_date)
                                         print("Data has been updated successfully.")
                                         break
                                     else:
@@ -143,12 +143,12 @@ def main():
                                 while True:
                                     new_death_date = input(
                                         "Enter new death date (dd.mm.yyyy) or leave blank to remove death date: ")
-                                    if not new_death_date.strip():  # If the string is empty or contains only spaces
+                                    if not new_death_date.strip():
                                         person.death_date = None
                                         print("Death date has been removed successfully.")
                                         break
                                     elif is_valid_date_format(new_death_date):
-                                        person.death_date = _parse_date(new_death_date)  # Access _parse_date via the class
+                                        person.death_date = _parse_date(new_death_date)
                                         print("Data has been updated successfully.")
                                         break
                                     else:
@@ -156,7 +156,7 @@ def main():
 
                         print("Data has been updated successfully.")
                         break  # Returning to main menu
-                    elif choice == "n":
+                    elif choice == "2":
                         confirm_delete = input("Would you like to delete your data? (y/n): ").lower()
                         while confirm_delete not in ['y', 'n']:
                             print("Invalid input. Please enter 'y' or 'n'.")
@@ -166,13 +166,16 @@ def main():
                             for person in results:
                                 database.delete_person(person)
                             print("Data has been deleted.")
-                            break
+                            break  # Возврат к основному меню
                         elif confirm_delete == "n":
                             print("Returning to previous menu.")
-                            break
-                else:
-                    print("No matching records found.")
-                    break
+                            break  # Возврат к основному меню
+                    elif choice == "3":
+                        print("Returning to previous menu.")
+                        break  # Возврат к основному меню
+                    else:
+                        print("No matching records found.")
+                        break
 
         elif choice == "3":
             while True:
@@ -216,7 +219,6 @@ def main():
 
         else:
             print("Invalid choice. Please enter a number from 1 to 4.")
-
 
 if __name__ == "__main__":
     main()
