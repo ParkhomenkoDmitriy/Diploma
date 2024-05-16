@@ -5,22 +5,23 @@ import os
 
 
 def _parse_date(date_str):
-    if not date_str:  # Если строка пустая, вернуть None
+    if not date_str:
         return None
 
-    # Пробуем обработать строку для каждого из форматов
     formats = ["%d.%m.%Y", "%d %m %Y", "%d/%m/%Y", "%d,%m,%Y", "%d-%m-%Y"]
 
     for date_format in formats:
         try:
-            # Пытаемся преобразовать строку в дату используя текущий формат
             return datetime.datetime.strptime(date_str, date_format).date()
         except ValueError:
-            # Если возникает исключение ValueError, продолжаем с следующим форматом
             continue
 
-    # Если ни один из форматов не сработал, выдаем исключение
     raise ValueError("Invalid date format. Please use one of the following formats: %s" % ", ".join(formats))
+
+
+def count_leap_years(start_year, end_year):
+    leap_years = sum(1 for year in range(start_year, end_year + 1) if calendar.isleap(year))
+    return leap_years
 
 
 class Person:
@@ -32,27 +33,20 @@ class Person:
         self.death_date = _parse_date(death_date) if death_date else None
         self.gender = gender
 
-    # В методе age() класса Person
     def age(self, today=None):
         if not today:
             today = datetime.date.today()
 
         age = today.year - self.birth_date.year
 
-        # Проверяем, наступил ли уже день рождения в этом году
         if (self.birth_date.month, self.birth_date.day) > (today.month, today.day):
-            # Если еще не наступил, корректируем возраст
             age -= 1
-
         return age
-
-    def count_leap_years(self, start_year, end_year):
-        leap_years = sum(1 for year in range(start_year, end_year + 1) if calendar.isleap(year))
-        return leap_years
 
     def to_excel_row(self):
         return [self.first_name, self.last_name, self.middle_name, self.birth_date.strftime('%d.%m.%Y'),
                 self.death_date.strftime('%d.%m.%Y') if self.death_date else '', self.gender]
+
 
 class PersonDatabase:
     def __init__(self):
@@ -104,15 +98,14 @@ class PersonDatabase:
                 print("An error occurred while loading the database:", e)
                 break
 
+
 def main():
     database = PersonDatabase()
     database.load_from_excel("people.xlsx")
 
-    # Пример использования:
     for person in database.people:
         print(f"{person.first_name} {person.last_name}: {person.age()} years old")
 
-    # Сохранение базы данных в Excel файл
     database.save_to_excel("people_updated.xlsx")
 
 
