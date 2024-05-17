@@ -47,6 +47,7 @@ class Person:
         return [self.first_name, self.last_name, self.middle_name, self.birth_date.strftime('%d.%m.%Y'),
                 self.death_date.strftime('%d.%m.%Y') if self.death_date else '', self.gender]
 
+
 class PersonDatabase:
     def __init__(self):
         self.people = []
