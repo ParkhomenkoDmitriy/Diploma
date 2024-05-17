@@ -64,7 +64,7 @@ class PersonDatabase:
             if (query.lower() in person.first_name.lower() or
                     query.lower() in person.last_name.lower() or
                     (person.middle_name and query.lower() in person.middle_name.lower()) or
-                    query.lower() == person.gender.lower()):  # Поиск по полу
+                    query.lower() == person.gender.lower()):
                 results.append(person)
             elif any(part.lower() in person.first_name.lower() for part in query.split()) or \
                     any(part.lower() in person.last_name.lower() for part in query.split()) or \
@@ -97,17 +97,3 @@ class PersonDatabase:
             except Exception as e:
                 print("An error occurred while loading the database:", e)
                 break
-
-
-def main():
-    database = PersonDatabase()
-    database.load_from_excel("people.xlsx")
-
-    for person in database.people:
-        print(f"{person.first_name} {person.last_name}: {person.age()} years old")
-
-    database.save_to_excel("people_updated.xlsx")
-
-
-if __name__ == "__main__":
-    main()
