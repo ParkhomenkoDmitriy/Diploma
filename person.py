@@ -18,9 +18,11 @@ def _parse_date(date_str):
 
     raise ValueError("Invalid date format. Please use one of the following formats: %s" % ", ".join(formats))
 
+
 def count_leap_years(start_year, end_year):
     leap_years = sum(1 for year in range(start_year, end_year + 1) if calendar.isleap(year))
     return leap_years
+
 
 class Person:
     def __init__(self, first_name, last_name, birth_date, gender, middle_name=None, death_date=None):
