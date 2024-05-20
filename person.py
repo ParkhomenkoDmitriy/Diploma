@@ -34,7 +34,9 @@ class Person:
         self.gender = gender
 
     def age(self, today=None):
-        if not today:
+        if self.death_date:
+            today = self.death_date
+        elif not today:
             today = datetime.date.today()
 
         age = today.year - self.birth_date.year

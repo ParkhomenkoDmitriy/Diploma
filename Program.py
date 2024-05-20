@@ -10,8 +10,8 @@ def is_valid_date_format(date_str):
 
 
 class PersonManager:
-    def __init__(self):
-        self.database = PersonDatabase()
+    def __init__(self):  # создается новый экземпляр класса PersonDatabase
+        self.database = PersonDatabase()  # и присваивается атрибуту self.database
 
     def load_database(self):
         while True:
